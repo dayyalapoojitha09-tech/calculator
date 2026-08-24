@@ -7,46 +7,52 @@ let isError = false;
 
 // DOM Elements
 const display = document.getElementById('display');
+const displayContainer = document.querySelector('.display-container');
 const buttons = document.querySelectorAll('.btn');
 
 // --- Core Logic ---
 
 function updateDisplay(value) {
-    if (value === 'Error') {
+    if (value === 'Error 🥺') {
         display.textContent = value;
+        // Trigger a cute little shake for the error state
+        displayContainer.classList.add('shake');
+        setTimeout(() => displayContainer.classList.remove('shake'), 400);
     } else {
-        // Prevent extremely long decimals or large numbers from breaking the display
-        // Convert to string and limit length
         let stringValue = value.toString();
         
-        // Basic length limitation (12 chars max looks good on this layout)
-        if (stringValue.length > 12) {
-            // For simple numbers, truncate or format to exponential
+        // Prevent extremely long decimals or large numbers from breaking the cute display
+        if (stringValue.length > 10) {
             if (stringValue.includes('.')) {
-                // If it's a long decimal, cut it
                 const parts = stringValue.split('.');
                 const integerLength = parts[0].length;
-                if (integerLength >= 12) {
-                    // Number is too big, use exponential notation
-                    stringValue = parseFloat(value).toExponential(5);
+                if (integerLength >= 10) {
+                    stringValue = parseFloat(value).toExponential(4);
                 } else {
-                    const decimalLength = 11 - integerLength;
+                    const decimalLength = 9 - integerLength;
                     stringValue = parseFloat(value).toFixed(decimalLength);
                 }
             } else {
-                stringValue = parseFloat(value).toExponential(5);
+                stringValue = parseFloat(value).toExponential(4);
             }
         }
         display.textContent = stringValue;
     }
 }
 
-// Function to add the subtle highlight animation on the display
-function triggerDisplayAnimation() {
-    display.classList.add('highlight');
-    // Remove the highlight after a short delay
+// Function to add a soft pastel glow on the display upon calculate
+function triggerDisplayGlow() {
+    displayContainer.classList.add('glow');
     setTimeout(() => {
-        display.classList.remove('highlight');
+        displayContainer.classList.remove('glow');
+    }, 300);
+}
+
+// Function to add a tiny bounce/scale down to the display when clearing
+function triggerClearAnimation() {
+    displayContainer.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        displayContainer.style.transform = 'scale(1)';
     }, 150);
 }
 
@@ -72,7 +78,7 @@ function handleDecimal() {
         return;
     }
     
-    // Prevent multiple decimals in a single number
+    // Prevent multiple decimals
     if (!currentValue.includes('.')) {
         currentValue += '.';
         updateDisplay(currentValue);
@@ -88,13 +94,13 @@ function handleClear() {
     
     removeActiveOperatorClass();
     updateDisplay(currentValue);
+    triggerClearAnimation(); // Little reset pop
 }
 
 function calculate(a, b, op) {
     a = parseFloat(a);
     b = parseFloat(b);
     
-    // Handle invalid states gracefully
     if (isNaN(a) || isNaN(b)) return b;
 
     switch (op) {
@@ -102,8 +108,8 @@ function calculate(a, b, op) {
         case '-': return a - b;
         case '*': return a * b;
         case '/':
-            // Edge case: Division by zero
-            if (b === 0) return 'Error';
+            // Handle divide by zero cutely!
+            if (b === 0) return 'Error 🥺';
             return a / b;
         default: return b;
     }
@@ -112,7 +118,7 @@ function calculate(a, b, op) {
 function handleOperator(nextOperator) {
     if (isError) return;
 
-    // Edge case: Pressing an operator key twice in a row just replaces the operator
+    // Edge case: Pressing an operator key twice in a row replaces it
     if (operator && waitingForNewValue) {
         operator = nextOperator;
         setActiveOperatorClass(nextOperator);
@@ -120,50 +126,45 @@ function handleOperator(nextOperator) {
     }
 
     if (previousValue === null) {
-        // First operator pressed, store the value
         previousValue = currentValue;
     } else if (operator) {
-        // Chained calculation, e.g., 5 + 3 + 
         const result = calculate(previousValue, currentValue, operator);
         
-        if (result === 'Error') {
+        if (result === 'Error 🥺') {
             isError = true;
-            currentValue = 'Error';
+            currentValue = 'Error 🥺';
             updateDisplay(currentValue);
             return;
         } else {
-            // Round to avoid float precision issues (e.g., 0.1 + 0.2 = 0.30000000000000004)
-            // Multiplying by 10^10, rounding, and dividing removes typical JS float errors
-            currentValue = `${Math.round(result * 10000000000) / 10000000000}`;
+            currentValue = `${Math.round(result * 100000000) / 100000000}`;
             previousValue = currentValue;
             updateDisplay(currentValue);
-            triggerDisplayAnimation(); // Provide tactile visual feedback
+            triggerDisplayGlow(); 
         }
     }
 
     operator = nextOperator;
-    waitingForNewValue = true; // Next number input should start fresh
+    waitingForNewValue = true;
     setActiveOperatorClass(nextOperator);
 }
 
 function handleEquals() {
-    // Edge case: Pressing "=" with no second number entered should do nothing or return the current value
+    // Edge case: Pressing "=" with no second number entered does nothing
     if (isError || !operator || waitingForNewValue) return;
 
     const result = calculate(previousValue, currentValue, operator);
     
-    if (result === 'Error') {
+    if (result === 'Error 🥺') {
         isError = true;
-        currentValue = 'Error';
+        currentValue = 'Error 🥺';
     } else {
-        currentValue = `${Math.round(result * 10000000000) / 10000000000}`;
-        // Reset state for future calculations after equals
+        currentValue = `${Math.round(result * 100000000) / 100000000}`;
         previousValue = null;
         operator = null;
-        triggerDisplayAnimation();
+        triggerDisplayGlow();
     }
     
-    waitingForNewValue = true; // Prepare for possible next calculation
+    waitingForNewValue = true;
     removeActiveOperatorClass();
     updateDisplay(currentValue);
 }
@@ -180,11 +181,12 @@ function removeActiveOperatorClass() {
     buttons.forEach(btn => btn.classList.remove('active-op'));
 }
 
-// Visual active press simulation for keyboard
+// Visual active press down simulation for keyboard
 function simulateKeyPress(btnElement) {
     if (!btnElement) return;
     btnElement.classList.add('active-press');
-    setTimeout(() => btnElement.classList.remove('active-press'), 100);
+    // Matched to the 0.15s CSS transition for satisfying tactile feel
+    setTimeout(() => btnElement.classList.remove('active-press'), 150);
 }
 
 // --- Event Listeners ---
@@ -214,47 +216,35 @@ document.addEventListener('keydown', (e) => {
     let key = e.key;
     let btnToClick = null;
 
-    // Numbers
     if (/[0-9]/.test(key)) {
         e.preventDefault();
         handleNumber(key);
         btnToClick = Array.from(buttons).find(b => b.textContent === key && b.classList.contains('number'));
-    }
-    // Decimal
-    else if (key === '.' || key === ',') { // Support comma in some locales
+    } else if (key === '.' || key === ',') {
         e.preventDefault();
         handleDecimal();
         btnToClick = document.querySelector('[data-action="decimal"]');
-    }
-    // Operators
-    else if (key === '+' || key === '-') {
+    } else if (key === '+' || key === '-') {
         e.preventDefault();
         handleOperator(key);
         btnToClick = document.querySelector(`[data-action="${key}"]`);
-    }
-    else if (key === '*' || key === 'x') {
+    } else if (key === '*' || key === 'x') {
         e.preventDefault();
         handleOperator('*');
         btnToClick = document.querySelector('[data-action="*"]');
-    }
-    else if (key === '/') {
+    } else if (key === '/') {
         e.preventDefault();
         handleOperator('/');
         btnToClick = document.querySelector('[data-action="/"]');
-    }
-    // Equals
-    else if (key === 'Enter' || key === '=') {
+    } else if (key === 'Enter' || key === '=') {
         e.preventDefault();
         handleEquals();
         btnToClick = document.querySelector('[data-action="equals"]');
-    }
-    // Clear
-    else if (key === 'Escape' || key === 'Backspace' || key === 'c' || key === 'C') {
+    } else if (key === 'Escape' || key === 'Backspace' || key === 'c' || key === 'C') {
         e.preventDefault();
         handleClear();
         btnToClick = document.querySelector('[data-action="clear"]');
     }
 
-    // Trigger visual effect on keyboard press
     if (btnToClick) simulateKeyPress(btnToClick);
 });

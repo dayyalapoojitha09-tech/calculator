@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A beautifully designed, fully functional calculator web application.">
-    <title>Premium Calculator</title>
+    <meta name="description" content="A cute pastel calculator web application.">
+    <title>Cute Calculator ✨</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- Google Fonts for modern typography -->
+    <!-- Google Fonts for cute typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <main class="calculator">
         <!-- Display Screen -->
         <h1 class="sr-only" style="display: none;">Calculator</h1>
-        <div class="display" id="display" aria-live="polite" aria-atomic="true">0</div>
+        <div class="display-container">
+            <span class="sparkle">✨</span>
+            <div class="display" id="display" aria-live="polite" aria-atomic="true">0</div>
+        </div>
         
         <!-- Button Grid -->
         <div class="buttons">

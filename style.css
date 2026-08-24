@@ -6,14 +6,15 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #ffffff;
+    /* Using Nunito for soft, rounded text */
+    font-family: 'Nunito', sans-serif;
+    /* Soft pastel pink to lavender gradient background */
+    background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%); 
+    color: #5a4b5e;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    /* Prevent text selection on rapid clicks */
     user-select: none;
     -webkit-user-select: none;
 }
@@ -30,63 +31,98 @@ body {
     border-width: 0;
 }
 
-/* Calculator Container - Glassmorphism Effect */
+/* Calculator Container - Squishy aesthetic */
 .calculator {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 32px;
+    background: #ffffff;
+    border-radius: 40px; /* Very rounded squishy corners */
     padding: 32px;
     width: 100%;
-    max-width: 420px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    max-width: 380px;
+    box-shadow: 
+        0 20px 40px rgba(255, 182, 193, 0.4), /* Soft pink shadow instead of harsh black */
+        inset 0 0 0 6px #fff9fa; /* Inner rim for squishy bouncy look */
     display: flex;
     flex-direction: column;
 }
 
-/* Display Screen */
-.display {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
-    padding: 32px 24px;
+/* Display Screen Container */
+.display-container {
+    background: #fdf5f6; /* Very light pastel pink/white */
+    border-radius: 28px;
+    padding: 24px;
     margin-bottom: 24px;
+    position: relative;
+    box-shadow: 
+        inset 0 4px 10px rgba(0,0,0,0.03),
+        inset 0 2px 4px rgba(0,0,0,0.02);
+    border: 3px solid #fde2e4;
+    transition: all 0.3s ease;
+}
+
+/* Subtle glow animation when equals/operator is pressed */
+.display-container.glow {
+    box-shadow: 
+        0 0 20px rgba(255, 182, 193, 0.5),
+        inset 0 4px 10px rgba(0,0,0,0.02);
+    border-color: #ffb3c6;
+}
+
+/* Cute shake animation for errors */
+.display-container.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+}
+
+/* Tiny fun detail in the display */
+.sparkle {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.display {
     text-align: right;
-    font-size: 3.5rem;
-    font-weight: 500;
-    color: #f8fafc;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: #6d597a; /* Deep pastel purple for text readability */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.15);
-    transition: background-color 0.2s ease, transform 0.1s ease;
     word-break: break-all;
-}
-
-.display.highlight {
-    background: rgba(56, 189, 248, 0.2);
+    line-height: 1.1;
 }
 
 /* Buttons Grid Layout */
 .buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 14px;
 }
 
-/* General Button Styles */
+/* General Button Styles - Squishy and Tactile */
 .btn {
     border: none;
-    border-radius: 20px;
-    font-size: 1.75rem;
-    font-weight: 500;
+    border-radius: 24px; /* Squishy corners */
+    font-size: 1.8rem;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
-    color: #f8fafc;
-    padding: 24px 0;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: #fff0f3; /* Light pastel pink */
+    color: #6d597a;
+    padding: 20px 0;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    /* 3D push down shadow */
+    box-shadow: 
+        0 6px 0 #fde2e4, 
+        0 8px 10px rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,76 +130,95 @@ body {
 
 /* Tactile Hover Effects */
 .btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    filter: brightness(0.97);
+    transform: translateY(2px);
+    box-shadow: 
+        0 4px 0 #fde2e4,
+        0 6px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Active State (Mouse Press) */
+/* Active / Press Down State */
 .btn:active, 
 .btn.active-press {
-    transform: translateY(2px);
-    box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.2);
-    transition: all 0.05s ease;
+    transform: translateY(6px);
+    box-shadow: 
+        0 0 0 #fde2e4,
+        0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.btn.active-press.number {
-    background: rgba(255, 255, 255, 0.12);
-}
-
-/* Operator Buttons (+, -, *, /) */
+/* Operator Buttons - Deeper Pastel Peach/Pink Accent */
 .btn.operator {
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.1);
+    background: #ffb3c6;
+    color: #fff;
+    box-shadow: 
+        0 6px 0 #ff8fab,
+        0 8px 10px rgba(255, 143, 171, 0.2);
 }
 
 .btn.operator:hover {
-    background: rgba(56, 189, 248, 0.2);
+    box-shadow: 
+        0 4px 0 #ff8fab,
+        0 6px 8px rgba(255, 143, 171, 0.2);
 }
 
 .btn.operator:active,
 .btn.operator.active-press {
-    background: rgba(56, 189, 248, 0.25);
+    box-shadow: 
+        0 0 0 #ff8fab,
+        0 2px 4px rgba(255, 143, 171, 0.2);
 }
 
 /* Sticky Active State for chained calculations */
 .btn.operator.active-op {
-    background: #38bdf8;
-    color: #0f172a;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-    transform: translateY(2px);
+    background: #ff8fab;
+    transform: translateY(6px);
+    box-shadow: 
+        0 0 0 #ff8fab,
+        0 2px 4px rgba(255, 143, 171, 0.2);
 }
 
-/* Equals Button Accent */
+/* Equals Button Accent - Pastel Mint/Blue */
 .btn.equals {
-    background: #38bdf8;
-    color: #0f172a;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+    background: #bde0fe;
+    color: #5a8bb8; /* Deeper blue text */
+    box-shadow: 
+        0 6px 0 #a2d2ff,
+        0 8px 10px rgba(162, 210, 255, 0.3);
 }
 
 .btn.equals:hover {
-    background: #7dd3fc;
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+    box-shadow: 
+        0 4px 0 #a2d2ff,
+        0 6px 8px rgba(162, 210, 255, 0.3);
 }
 
 .btn.equals:active,
 .btn.equals.active-press {
-    background: #0ea5e9;
+    box-shadow: 
+        0 0 0 #a2d2ff,
+        0 2px 4px rgba(162, 210, 255, 0.3);
 }
 
-/* Clear Button Accent */
+/* Clear Button Accent - Pastel Lavender */
 .btn.clear {
-    color: #fb7185;
-    background: rgba(244, 63, 94, 0.08);
+    background: #e4c1f9;
+    color: #7b5993;
+    box-shadow: 
+        0 6px 0 #d0a5ed,
+        0 8px 10px rgba(208, 165, 237, 0.2);
 }
 
 .btn.clear:hover {
-    background: rgba(244, 63, 94, 0.15);
+    box-shadow: 
+        0 4px 0 #d0a5ed,
+        0 6px 8px rgba(208, 165, 237, 0.2);
 }
 
 .btn.clear:active,
 .btn.clear.active-press {
-    background: rgba(244, 63, 94, 0.2);
+    box-shadow: 
+        0 0 0 #d0a5ed,
+        0 2px 4px rgba(208, 165, 237, 0.2);
 }
 
 /* Grid Spanning */
@@ -178,22 +233,18 @@ body {
 /* Mobile Responsiveness */
 @media (max-width: 480px) {
     body {
-        align-items: flex-end;
+        align-items: flex-end; /* Keep it grounded at the bottom on mobile */
     }
     
     .calculator {
-        border-radius: 32px 32px 0 0;
-        padding: 32px 24px;
+        border-radius: 40px 40px 0 0;
+        padding: 24px;
         max-width: 100%;
-        border-bottom: none;
-        border-left: none;
-        border-right: none;
+        box-shadow: 0 -10px 40px rgba(255, 182, 193, 0.3);
     }
     
     .display {
-        font-size: 4rem;
-        padding: 24px 16px;
-        margin-bottom: 32px;
+        font-size: 3.5rem;
     }
     
     .buttons {
@@ -201,8 +252,8 @@ body {
     }
     
     .btn {
-        padding: 20px 0;
-        font-size: 1.5rem;
-        border-radius: 16px;
+        padding: 18px 0;
+        font-size: 1.6rem;
+        border-radius: 20px;
     }
 }
