@@ -53,6 +53,35 @@
             <button class="btn equals" data-action="equals" aria-label="Calculate">=</button>
         </div>
     </main>
+
+    <!-- Cute AI Assistant Widget -->
+    <div id="ai-widget" class="ai-widget closed">
+        <!-- Floating Chat Button -->
+        <button id="ai-toggle-btn" class="ai-toggle-btn" aria-label="Toggle AI Assistant">
+            🪄
+        </button>
+
+        <!-- Chat Panel -->
+        <div class="ai-panel">
+            <div class="ai-header">
+                <h3>Math Helper ✨</h3>
+                <button id="ai-close-btn" class="ai-close-btn" aria-label="Close panel">✖</button>
+            </div>
+            
+            <div class="ai-chat-history" id="ai-chat-history">
+                <div class="ai-message ai">
+                    Hi! Need help with your math? 🌸
+                </div>
+            </div>
+            
+            <form class="ai-input-area" id="ai-input-form">
+                <input type="text" id="ai-input" placeholder="Ask a math question..." autocomplete="off">
+                <button type="submit" id="ai-send-btn" aria-label="Send message">📤</button>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script src="ai-assistant.js"></script>
 </body>
 </html>
