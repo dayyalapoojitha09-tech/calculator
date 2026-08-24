@@ -158,20 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Integration ---
     async function fetchAIResponse(messages) {
-        const API_KEY = window.GROQ_API_KEY || "YOUR_API_KEY_HERE"; 
-        const API_URL = "https://api.groq.com/openai/v1/chat/completions"; 
+        // Call our secure Netlify serverless function!
+        const API_URL = "/.netlify/functions/chat"; 
 
-        // Real API fetch block for Groq (OpenAI format)
         const response = await fetch(API_URL, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${API_KEY}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "qwen/qwen3.6-27b", // Using an active, supported model
-                max_tokens: 250,
-                messages: messages // Send all messages including the system prompt
+                messages: messages
             })
         });
 
