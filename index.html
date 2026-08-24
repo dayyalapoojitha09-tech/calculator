@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A beautifully designed, fully functional calculator web application.">
+    <title>Premium Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="calculator">
+        <!-- Display Screen -->
+        <h1 class="sr-only" style="display: none;">Calculator</h1>
+        <div class="display" id="display" aria-live="polite" aria-atomic="true">0</div>
+        
+        <!-- Button Grid -->
+        <div class="buttons">
+            <!-- Row 1 -->
+            <button class="btn clear span-3" data-action="clear" aria-label="Clear">C</button>
+            <button class="btn operator" data-action="/" aria-label="Divide">÷</button>
+
+            <!-- Row 2 -->
+            <button class="btn number">7</button>
+            <button class="btn number">8</button>
+            <button class="btn number">9</button>
+            <button class="btn operator" data-action="*" aria-label="Multiply">×</button>
+
+            <!-- Row 3 -->
+            <button class="btn number">4</button>
+            <button class="btn number">5</button>
+            <button class="btn number">6</button>
+            <button class="btn operator" data-action="-" aria-label="Subtract">−</button>
+
+            <!-- Row 4 -->
+            <button class="btn number">1</button>
+            <button class="btn number">2</button>
+            <button class="btn number">3</button>
+            <button class="btn operator" data-action="+" aria-label="Add">+</button>
+
+            <!-- Row 5 -->
+            <button class="btn number span-2">0</button>
+            <button class="btn number" data-action="decimal" aria-label="Decimal">.</button>
+            <button class="btn equals" data-action="equals" aria-label="Calculate">=</button>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
