@@ -239,6 +239,11 @@ buttons.forEach(button => {
 
 // Keyboard support
 document.addEventListener('keydown', (e) => {
+    // Prevent the calculator from stealing keystrokes when you're typing in the AI chat input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+    }
+
     let key = e.key;
     let btnToClick = null;
 
