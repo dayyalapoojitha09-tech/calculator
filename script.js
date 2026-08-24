@@ -7,8 +7,24 @@ let isError = false;
 
 // DOM Elements
 const display = document.getElementById('display');
+const expressionDisplay = document.getElementById('expression'); // New expression line element
 const displayContainer = document.querySelector('.display-container');
 const buttons = document.querySelectorAll('.btn');
+
+// --- Helper Functions for Expression Display ---
+
+// Map raw JS operators to cute mathematical symbols for the expression display
+function getOperatorSymbol(op) {
+    if (op === '*') return '×';
+    if (op === '/') return '÷';
+    if (op === '-') return '−';
+    return '+';
+}
+
+// Updates the small expression text above the main number
+function updateExpressionDisplay(text) {
+    expressionDisplay.textContent = text;
+}
 
 // --- Core Logic ---
 
@@ -94,6 +110,7 @@ function handleClear() {
     
     removeActiveOperatorClass();
     updateDisplay(currentValue);
+    updateExpressionDisplay(''); // Clear expression line too
     triggerClearAnimation(); // Little reset pop
 }
 
@@ -121,6 +138,8 @@ function handleOperator(nextOperator) {
     // Edge case: Pressing an operator key twice in a row replaces it
     if (operator && waitingForNewValue) {
         operator = nextOperator;
+        // Update expression line to show new replaced operator
+        updateExpressionDisplay(`${previousValue} ${getOperatorSymbol(operator)}`);
         setActiveOperatorClass(nextOperator);
         return;
     }
@@ -134,6 +153,7 @@ function handleOperator(nextOperator) {
             isError = true;
             currentValue = 'Error 🥺';
             updateDisplay(currentValue);
+            updateExpressionDisplay(''); // Clear expression on error
             return;
         } else {
             currentValue = `${Math.round(result * 100000000) / 100000000}`;
@@ -145,12 +165,18 @@ function handleOperator(nextOperator) {
 
     operator = nextOperator;
     waitingForNewValue = true;
+    
+    // Show the running expression on the display when an operator is pressed
+    updateExpressionDisplay(`${previousValue} ${getOperatorSymbol(operator)}`);
     setActiveOperatorClass(nextOperator);
 }
 
 function handleEquals() {
     // Edge case: Pressing "=" with no second number entered does nothing
     if (isError || !operator || waitingForNewValue) return;
+
+    // Show the full expression before we calculate and reset state
+    updateExpressionDisplay(`${previousValue} ${getOperatorSymbol(operator)} ${currentValue} =`);
 
     const result = calculate(previousValue, currentValue, operator);
     
