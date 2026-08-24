@@ -519,3 +519,31 @@ body {
         height: 60vh;
     }
 }
+
+/* ========================================================
+   Cute App Footer
+======================================================== */
+
+.app-footer {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #6d597a;
+    font-size: 1.4rem;
+    font-weight: 900;
+    opacity: 0.85;
+    pointer-events: none;
+}
+
+.app-footer p {
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .app-footer {
+        top: 16px;
+        font-size: 1.2rem;
+    }
+}

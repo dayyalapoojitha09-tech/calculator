@@ -158,47 +158,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Integration ---
     async function fetchAIResponse(messages) {
-        // =========================================================================
-        // TODO: INSERT YOUR ACTUAL API KEY HERE
-        // =========================================================================
         const API_KEY = "YOUR_API_KEY_HERE"; 
-        const API_URL = "https://api.anthropic.com/v1/messages"; // Example endpoint
-        // NOTE: If using Anthropic directly from the browser, you may hit CORS issues.
-        // For a production app, you should proxy this through a backend server.
-        // If using an alternative like OpenAI, adjust the endpoint and body structure accordingly.
+        const API_URL = "https://api.groq.com/openai/v1/chat/completions"; 
 
-        // Simulated API Response (Fallback)
-        // Remove this if block once you put in a real API key and endpoint.
-        if (API_KEY === "YOUR_API_KEY_HERE") {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    // Just a mock response that echoes back and finds math
-                    const lastUserMsg = messages[messages.length - 1].content.toLowerCase();
-                    if (lastUserMsg.includes("15%") && lastUserMsg.includes("240")) {
-                        resolve("15% of 240 is 36! I can put that in the calculator for you 🌸 <result>36</result>");
-                    } else if (lastUserMsg.includes("compound interest")) {
-                        resolve("Compound interest is calculated using the formula A = P(1 + r/n)^(nt). ✨ It means you earn interest on your interest!");
-                    } else {
-                        resolve("I'm a placeholder AI! Plug your API key into `ai-assistant.js` to bring me to life! ✨");
-                    }
-                }, 1000);
-            });
-        }
-
-        // Real API fetch block
+        // Real API fetch block for Groq (OpenAI format)
         const response = await fetch(API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "x-api-key": API_KEY,
-                "anthropic-version": "2023-06-01",
-                "anthropic-dangerous-direct-browser-access": "true" // Required for browser calls to Anthropic
+                "Authorization": `Bearer ${API_KEY}`
             },
             body: JSON.stringify({
-                model: "claude-3-haiku-20240307",
+                model: "qwen/qwen3.6-27b", // Using an active, supported model
                 max_tokens: 250,
-                system: messages[0].content, // Extract system prompt
-                messages: messages.slice(1)  // Send only user/assistant messages
+                messages: messages // Send all messages including the system prompt
             })
         });
 
@@ -207,6 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = await response.json();
-        return data.content[0].text;
+        return data.choices[0].message.content;
     }
 });
