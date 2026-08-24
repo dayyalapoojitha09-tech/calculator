@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- API Integration ---
     async function fetchAIResponse(messages) {
-        const API_KEY = "YOUR_API_KEY_HERE"; 
+        const API_KEY = window.GROQ_API_KEY || "YOUR_API_KEY_HERE"; 
         const API_URL = "https://api.groq.com/openai/v1/chat/completions"; 
 
         // Real API fetch block for Groq (OpenAI format)
